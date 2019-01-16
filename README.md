@@ -99,6 +99,7 @@ sh scripts/install/build_integral_image_lib.bash
 ```
 
 5. Avod uses Protobufs to configure model and training parameters. Before the framework can be used, the protos must be compiled (from top level avod folder):
+https://askubuntu.com/questions/1072683/how-can-i-install-protoc-on-ubuntu-16-04 
 ```bash
 sh avod/protos/run_protoc.sh
 ```
@@ -150,7 +151,7 @@ data
 There are sample configuration files for training inside `avod/configs`. You can train on the example configs, or modify an existing configuration. To train a new configuration, copy a config, e.g. `pyramid_cars_with_aug_example.config`, rename this file to a unique experiment name and make sure the file name matches the `checkpoint_name: 'pyramid_cars_with_aug_example'` entry inside your config.
 
 ### Run Trainer
-To start training, run the following:
+To start training, run the following (add --device='0' for systems with one GPU):
 ```bash
 python avod/experiments/run_training.py --pipeline_config=avod/configs/pyramid_cars_with_aug_example.config
 ```
