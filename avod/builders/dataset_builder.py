@@ -26,6 +26,7 @@ class DatasetBuilder(object):
 
     KITTI_TRAIN = KittiDatasetConfig(
         name="kitti",
+        dataset_dir='/notebooks/DATA/Kitti/object',
         data_split="train",
         data_split_dir="training",
         has_labels=True,
@@ -36,6 +37,7 @@ class DatasetBuilder(object):
 
     KITTI_VAL = KittiDatasetConfig(
         name="kitti",
+        dataset_dir='/notebooks/DATA/Kitti/object',
         data_split="val",
         data_split_dir="training",
         has_labels=True,
@@ -46,6 +48,7 @@ class DatasetBuilder(object):
 
     KITTI_TEST = KittiDatasetConfig(
         name="kitti",
+        dataset_dir='/notebooks/DATA/Kitti/object',
         data_split="test",
         data_split_dir="testing",
         has_labels=False,
@@ -56,6 +59,7 @@ class DatasetBuilder(object):
 
     KITTI_TRAINVAL = KittiDatasetConfig(
         name="kitti",
+        dataset_dir='/notebooks/DATA/Kitti/object',
         data_split="trainval",
         data_split_dir="training",
         has_labels=True,
@@ -66,6 +70,7 @@ class DatasetBuilder(object):
 
     KITTI_TRAIN_MINI = KittiDatasetConfig(
         name="kitti",
+        dataset_dir='/notebooks/DATA/Kitti/object',
         data_split="train_mini",
         data_split_dir="training",
         has_labels=True,
@@ -75,6 +80,7 @@ class DatasetBuilder(object):
     )
     KITTI_VAL_MINI = KittiDatasetConfig(
         name="kitti",
+        dataset_dir='/notebooks/DATA/Kitti/object',
         data_split="val_mini",
         data_split_dir="training",
         has_labels=True,
@@ -84,6 +90,7 @@ class DatasetBuilder(object):
     )
     KITTI_TEST_MINI = KittiDatasetConfig(
         name="kitti",
+        dataset_dir='/notebooks/DATA/Kitti/object',
         data_split="test_mini",
         data_split_dir="testing",
         has_labels=False,
