@@ -8,7 +8,7 @@ message KittiDatasetConfig {
     optional string name = 1 [default = "kitti"];
 
     // Top level directory of the dataset
-    optional string dataset_dir = 2 [default = "/notebooks/Kitti/object"];
+    optional string dataset_dir = 2 [default = "/notebooks/DATA/Kitti/object"];
 
     // Split for the data (e.g. 'train', 'val')
     optional string data_split = 3 [default = "train"];

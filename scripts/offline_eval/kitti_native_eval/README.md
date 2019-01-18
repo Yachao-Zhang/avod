@@ -29,7 +29,7 @@ Alternatively, you can run the evaluation using the following command on a singl
 ```
 
 - Place the results folder in data folder and use /kitti_native_eval as results_dir
-- Use /notebooks/Kitti/object/training/label_2  as your groundtruth_dir
+- Use /notebooks/DATA/Kitti/object/training/label_2  as your groundtruth_dir
 
 ---
 
