@@ -10,6 +10,7 @@
 1. Install:
 ```
 sudo apt-get install gnuplot gnuplot5
+sudo apt-get install libboost-all-dev
 
 cd /kitti_native_eval
 
