@@ -137,7 +137,7 @@ Note: This script does parallel processing with `num_[class]_children` processes
 
 ```bash
 cd avod
-python scripts/preprocessing/gen_mini_batches.py
+python3 scripts/preprocessing/gen_mini_batches.py
 ```
 
 Once this script is done, you should now have the following folders inside `avod/data`:
@@ -153,22 +153,22 @@ There are sample configuration files for training inside `avod/configs`. You can
 ### Run Trainer
 To start training, run the following (add --device='0' for systems with one GPU):
 ```bash
-python avod/experiments/run_training.py --pipeline_config=avod/configs/pyramid_cars_with_aug_example.config
+python3 avod/experiments/run_training.py --pipeline_config=avod/configs/pyramid_cars_with_aug_example.config
 ```
 (Optional) Training defaults to using GPU device 1, and the `train` split. You can specify using the GPU device and data split as follows:
 ```bash
-python avod/experiments/run_training.py --pipeline_config=avod/configs/pyramid_cars_with_aug_example.config  --device='0' --data_split='train'
+python3 avod/experiments/run_training.py --pipeline_config=avod/configs/pyramid_cars_with_aug_example.config  --device='0' --data_split='train'
 ```
 Depending on your setup, training should take approximately 16 hours with a Titan Xp, and 20 hours with a GTX 1080. If the process was interrupted, training (or evaluation) will continue from the last saved checkpoint if it exists.
 
 ### Run Evaluator
 To start evaluation, run the following:
 ```bash
-python avod/experiments/run_evaluation.py --pipeline_config=avod/configs/pyramid_cars_with_aug_example.config
+python3 avod/experiments/run_evaluation.py --pipeline_config=avod/configs/pyramid_cars_with_aug_example.config
 ```
 (Optional) With additional options:
 ```bash
-python avod/experiments/run_evaluation.py --pipeline_config=avod/configs/pyramid_cars_with_aug_example.config --device='0' --data_split='val'
+python3 avod/experiments/run_evaluation.py --pipeline_config=avod/data/outputs/pyramid_cars_with_aug_example/pyramid_cars_with_aug_example.config --device='0' --data_split='val'
 ```
 
 The evaluator has two main modes, you can either evaluate a single checkpoint, a list of indices of checkpoints, or repeatedly. The evaluator is designed to be run in parallel with the trainer on the same GPU, to repeatedly evaluate checkpoints. This can be configured inside the same config file (look for `eval_config` entry).
@@ -184,7 +184,7 @@ Note: In addition to evaluating the loss, calculating accuracies, etc, the evalu
 ### Run Inference
 To run inference on the `val` split, run the following script:
 ```bash
-python avod/experiments/run_inference.py --checkpoint_name='pyramid_cars_with_aug_example' --data_split='val' --ckpt_indices=120 --device='1'
+python3 avod/experiments/run_inference.py --checkpoint_name='pyramid_cars_with_aug_example' --data_split='val' --ckpt_indices=120 --device='1'
 ```
 The `ckpt_indices` here indicates the indices of the checkpoint in the list. If the `checkpoint_interval` inside your config is `1000`, to evaluate checkpoints `116000` and `120000`, the indices should be `--ckpt_indices=116 120`. You can also just set this to `-1` to evaluate the last checkpoint.
 
