@@ -76,8 +76,8 @@ class KittiUtils(object):
         raise ValueError('Invalid class string {}, not in {}'.format(
             class_str, self.dataset.classes))
 
-    def create_slice_filter(self, point_cloud, area_extents,
-                            ground_plane, ground_offset_dist, offset_dist):
+    def create_slice_filter(self, point_cloud, area_extents, ground_plane, 
+                            ground_offset_dist, offset_dist, frustum=True):
         """ Creates a slice filter to take a slice of the point cloud between
             ground_offset_dist and offset_dist above the ground plane
 
@@ -93,15 +93,23 @@ class KittiUtils(object):
                 True indicates the point should be kept
                 False indicates the point should be removed
         """
+        if frustum:
+            # Filter points within certain xyz range and offset from ground plane
+            offset_filter = obj_utils.get_frustum_filter(point_cloud, area_extents,
+                                                    ground_plane, offset_dist)
 
-        # Filter points within certain xyz range and offset from ground plane
-        offset_filter = obj_utils.get_point_filter(point_cloud, area_extents,
-                                                   ground_plane, offset_dist)
+            # Filter points within 0.2m of the road plane
+            road_filter = obj_utils.get_frustum_filter(point_cloud, area_extents,
+                                                    ground_plane, ground_offset_dist)
 
-        # Filter points within 0.2m of the road plane
-        road_filter = obj_utils.get_point_filter(point_cloud, area_extents,
-                                                 ground_plane,
-                                                 ground_offset_dist)
+        else:
+            # Filter points within certain xyz range and offset from ground plane
+            offset_filter = obj_utils.get_point_filter(point_cloud, area_extents,
+                                                    ground_plane, offset_dist)
+
+            # Filter points within 0.2m of the road plane
+            road_filter = obj_utils.get_point_filter(point_cloud, area_extents,
+                                                    ground_plane, ground_offset_dist)
 
         slice_filter = np.logical_xor(offset_filter, road_filter)
         return slice_filter
