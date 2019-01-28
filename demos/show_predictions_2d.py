@@ -49,15 +49,16 @@ def main():
 
     fig_size = (10, 6.1)
 
-    rpn_score_threshold = 0.1
-    avod_score_threshold = 0.1
+    rpn_score_threshold = 0.25
+    avod_score_threshold = 0.25
 
-    gt_classes = ['Car']
+    # gt_classes = ['Car']
     # gt_classes = ['Pedestrian', 'Cyclist']
+    gt_classes = ['Car', 'Pedestrian', 'Cyclist']
 
     # Overwrite this to select a specific checkpoint
     global_step = None
-    checkpoint_name = 'pyramid_cars_with_aug_example'
+    checkpoint_name = 'pyramid_all_aug_2'
 
     # Drawing Toggles
     draw_proposals_separate = False
@@ -69,7 +70,7 @@ def main():
     draw_orientations_on_pred = False
 
     # Draw 2D bounding boxes
-    draw_projected_2d_boxes = True
+    draw_projected_2d_boxes = False
 
     # Save images for samples with no detections
     save_empty_images = True
