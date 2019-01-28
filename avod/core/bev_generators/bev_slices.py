@@ -68,15 +68,16 @@ class BevSlices(bev_generator.BevGenerator):
                 area_extents,
                 ground_plane,
                 height_lo,
-                height_hi)
+                height_hi,
+		frustum=True)
 
             # Apply slice filter
             slice_points = all_points[slice_filter]
 
-            if len(slice_points) > 1:
+            voxel_grid_2d = VoxelGrid2D()
 
+            if len(slice_points) > 1:
                 # Create Voxel Grid 2D
-                voxel_grid_2d = VoxelGrid2D()
                 voxel_grid_2d.voxelize_2d(
                     slice_points, voxel_size,
                     extents=area_extents,
