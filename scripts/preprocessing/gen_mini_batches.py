@@ -95,18 +95,21 @@ def main(dataset=None):
         '/configs/mb_preprocessing/rpn_people.config'
     all_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/rpn_all.config'
+    carla_car_dataset_config_path = avod.root_dir() + \
+        '/configs/mb_preprocessing/carla_car.config'
 
     ##############################
     # Options
     ##############################
     # Serial vs parallel processing
-    in_parallel = True
+    in_parallel = False
 
-    process_car = True   # Cars
-    process_ped = True  # Pedestrians
-    process_cyc = True  # Cyclists
-    process_ppl = True   # People (Pedestrians + Cyclists)
-    process_all = True # Cars + Pedestrians + Cyclists
+    process_car = False   # Cars
+    process_ped = False  # Pedestrians
+    process_cyc = False  # Cyclists
+    process_ppl = False   # People (Pedestrians + Cyclists)
+    process_all = False # Cars + Pedestrians + Cyclists
+    process_carla_car = True
 
     # Number of child processes to fork, samples will
     #  be divided evenly amongst the processes (in_parallel must be True)
@@ -134,6 +137,9 @@ def main(dataset=None):
     if process_all:
         all_dataset = DatasetBuilder.load_dataset_from_config(
             all_dataset_config_path)
+    if process_carla_car:
+        carla_car_dataset = DatasetBuilder.load_dataset_from_config(
+            carla_car_dataset_config_path)
 
     ##############################
     # Serial Processing
@@ -149,6 +155,8 @@ def main(dataset=None):
             do_preprocessing(ppl_dataset, None)
         if process_all:
             do_preprocessing(all_dataset, None)
+        if process_carla_car:
+            do_preprocessing(carla_car_dataset, None)
 
         print('All Done (Serial)')
 
@@ -202,6 +210,14 @@ def main(dataset=None):
                 all_child_pids,
                 all_dataset,
                 all_indices_split,
+                num_all_children)
+
+        if process_carla_car:
+            carla_car_indices_split = split_indices(carla_car_dataset, num_all_children)
+            split_work(
+                all_child_pids,
+                carla_car_dataset,
+                carla_car_indices_split,
                 num_all_children)
 
         # Wait to child processes to finish

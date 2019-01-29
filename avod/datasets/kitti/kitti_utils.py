@@ -152,9 +152,15 @@ class KittiUtils(object):
             # wavedata wants im_size in (w, h) order
             im_size = [image_shape[1], image_shape[0]]
 
-            point_cloud = obj_utils.get_lidar_point_cloud(
-                img_idx, self.dataset.calib_dir, self.dataset.velo_dir,
-                im_size=im_size)
+            if self.dataset.name == 'carla':
+                point_cloud = obj_utils.get_carla_point_cloud(
+                    img_idx, self.dataset.calib_dir, self.dataset.velo_dir,
+                    im_size=im_size)
+
+            else:
+                point_cloud = obj_utils.get_lidar_point_cloud(
+                    img_idx, self.dataset.calib_dir, self.dataset.velo_dir,
+                    im_size=im_size)
 
         else:
             raise ValueError("Invalid source {}".format(source))
