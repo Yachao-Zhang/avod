@@ -74,18 +74,17 @@ class BevSlices(bev_generator.BevGenerator):
             # Apply slice filter
             slice_points = all_points[slice_filter]
 
+            #if len(slice_points) > 1:
+            # Create Voxel Grid 2D
             voxel_grid_2d = VoxelGrid2D()
+            voxel_grid_2d.voxelize_2d(
+                slice_points, voxel_size,
+                extents=area_extents,
+                ground_plane=ground_plane,
+                create_leaf_layout=False)
 
-            if len(slice_points) > 1:
-                # Create Voxel Grid 2D
-                voxel_grid_2d.voxelize_2d(
-                    slice_points, voxel_size,
-                    extents=area_extents,
-                    ground_plane=ground_plane,
-                    create_leaf_layout=False)
-
-                # Remove y values (all 0)
-                voxel_indices = voxel_grid_2d.voxel_indices[:, [0, 2]]
+            # Remove y values (all 0)
+            voxel_indices = voxel_grid_2d.voxel_indices[:, [0, 2]]
 
             # Create empty BEV images
             height_map = np.zeros((voxel_grid_2d.num_divisions[0],
