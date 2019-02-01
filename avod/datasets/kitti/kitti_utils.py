@@ -176,7 +176,12 @@ class KittiUtils(object):
         Returns:
             ground_plane: ground plane coefficients
         """
-        ground_plane = obj_utils.get_road_plane(int(sample_name),
+        #TODO: Remove this, only for testing
+        if self.dataset.name == 'carla':
+            ground_plane = None
+
+        else:
+            ground_plane = obj_utils.get_road_plane(int(sample_name),
                                                 self.dataset.planes_dir)
         return ground_plane
 
