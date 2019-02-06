@@ -324,9 +324,11 @@ class KittiUtils(object):
         Returns:
             filtered object label list
         """
+        # There may be some datapoints with no classes in them.
+        if not objects:
+            return []
         if classes is None:
             classes = self.dataset.classes
-
         objects = np.asanyarray(objects)
         filter_mask = np.ones(len(objects), dtype=np.bool)
 
