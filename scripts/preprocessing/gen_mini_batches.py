@@ -94,7 +94,7 @@ def main(dataset=None):
     ppl_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/rpn_people.config'
     all_dataset_config_path = avod.root_dir() + \
-        '/configs/mb_preprocessing/rpn_all.config'
+        '/configs/mb_preprocessing/test_all.config'
 
     ##############################
     # Options
