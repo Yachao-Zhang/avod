@@ -1,4 +1,5 @@
 from tensorflow.contrib import slim
+from tensorflow.layers import conv2d
 
 from avod.core.avod_fc_layers import avod_fc_layer_utils
 
@@ -105,10 +106,13 @@ def build_output_layers(tensor_in,
     """
 
     # Classification
+    cls_logits = conv2d(tensor_in, num_final_classes, 1)
+    """
     cls_logits = slim.fully_connected(tensor_in,
                                       num_final_classes,
                                       activation_fn=None,
                                       scope='cls_out')
+    """
 
     # Offsets
     off_out_size = avod_fc_layer_utils.OFFSETS_OUTPUT_SIZE[box_rep]
