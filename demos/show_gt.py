@@ -1,25 +1,9 @@
-import os
-import sys
-import time
-
-import numpy as np
-
 from PIL import Image
 import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-import matplotlib.patheffects as patheffects
 
 from wavedata.tools.core import calib_utils
 from wavedata.tools.obj_detection import obj_utils
-from wavedata.tools.obj_detection import evaluation
 from wavedata.tools.visualization import vis_utils
-
-import avod
-from avod.builders.dataset_builder import DatasetBuilder
-from avod.core import box_3d_encoder
-from avod.core import box_3d_projector
-from avod.core import anchor_projector
-
 
 BOX_COLOUR_SCHEME = {
     'Car': '#00FF00',           # Green
