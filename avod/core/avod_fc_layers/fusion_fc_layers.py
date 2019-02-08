@@ -1,5 +1,4 @@
 from tensorflow.contrib import slim
-from tensorflow.layers import conv2d
 
 from avod.core.avod_fc_layers import avod_fc_layer_utils
 
@@ -106,13 +105,10 @@ def build_output_layers(tensor_in,
     """
 
     # Classification
-    cls_logits = conv2d(tensor_in, num_final_classes, 1)
-    """
     cls_logits = slim.fully_connected(tensor_in,
                                       num_final_classes,
                                       activation_fn=None,
                                       scope='cls_out')
-    """
 
     # Offsets
     off_out_size = avod_fc_layer_utils.OFFSETS_OUTPUT_SIZE[box_rep]
@@ -167,8 +163,8 @@ def _early_fusion_fc_layers(num_layers, layer_sizes,
             fc_name_idx = 6 + layer_idx
 
             # Use conv2d instead of fully_connected layers.
-            fc_layer = slim.fully_connected(fc_drop, layer_sizes[layer_idx],
-                                            scope='fc{}'.format(fc_name_idx))
+            #fc_layer = slim.conv2d(fc_drop, layer_sizes[layer_idx], (1,1), scope='fc{}'.format(fc_name_idx))
+            fc_layer = slim.fully_connected(fc_drop, layer_sizes[layer_idx], scope='fc{}'.format(fc_name_idx))
 
             fc_drop = slim.dropout(
                 fc_layer,
