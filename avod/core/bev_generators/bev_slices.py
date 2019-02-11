@@ -90,13 +90,22 @@ class BevSlices(bev_generator.BevGenerator):
             height_map = np.zeros((voxel_grid_2d.num_divisions[0],
                                    voxel_grid_2d.num_divisions[2]))
 
+            min_height_map = np.zeros((voxel_grid_2d.num_divisions[0],
+                                   voxel_grid_2d.num_divisions[2]))
+
             # Only update pixels where voxels have max height values,
             # and normalize by height of slices
             voxel_grid_2d.heights = voxel_grid_2d.heights - height_lo
+            voxel_grid_2d.heights = voxel_grid_2d.min_heights - height_lo
+
             height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
                 np.asarray(voxel_grid_2d.heights) / self.height_per_division
 
+            min_height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
+                np.asarray(voxel_grid_2d.min_heights) / self.height_per_division
+
             height_maps.append(height_map)
+            height_maps.append(min_height_map)
 
         # Rotate height maps 90 degrees
         # (transpose and flip) is faster than np.rot90
