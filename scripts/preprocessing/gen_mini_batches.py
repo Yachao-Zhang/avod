@@ -103,10 +103,10 @@ def main(dataset=None):
     in_parallel = True
 
     process_car = True   # Cars
-    process_ped = True  # Pedestrians
-    process_cyc = True  # Cyclists
-    process_ppl = True   # People (Pedestrians + Cyclists)
-    process_all = True # Cars + Pedestrians + Cyclists
+    process_ped = False  # Pedestrians
+    process_cyc = False  # Cyclists
+    process_ppl = False   # People (Pedestrians + Cyclists)
+    process_all = False # Cars + Pedestrians + Cyclists
 
     # Number of child processes to fork, samples will
     #  be divided evenly amongst the processes (in_parallel must be True)
