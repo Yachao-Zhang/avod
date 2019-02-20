@@ -45,10 +45,11 @@ def main():
             bev_images = dataset_utils.create_bev_maps(sample_name,
                                                        source='lidar')
             height_maps = np.asarray(bev_images['height_maps'])
-            density_map = np.asarray(bev_images['density_map'])
+            density_maps = np.asarray(bev_images['density_map'])
 
             height_means = [np.mean(height_map) for height_map in height_maps]
-            density_mean = np.mean(density_map)
+            #density_mean = np.mean(density_map)
+            density_mean = [np.mean(density_map) for density_map in density_maps]
 
             bev_means = np.stack((*height_means, density_mean))
             bev_sum += bev_means

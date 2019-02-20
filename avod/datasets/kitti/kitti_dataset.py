@@ -342,8 +342,8 @@ class KittiDataset:
                 point_cloud, ground_plane)
 
             height_maps = bev_images.get('height_maps')
-            density_map = bev_images.get('density_map')
-            bev_input = np.dstack((*height_maps, density_map))
+            density_maps = bev_images.get('density_map')
+            bev_input = np.dstack((*height_maps, *density_maps))
 
             sample_dict = {
                 constants.KEY_LABEL_BOXES_3D: label_boxes_3d,
