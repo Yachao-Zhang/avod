@@ -96,7 +96,7 @@ class BevSlices(bev_generator.BevGenerator):
             # Only update pixels where voxels have max height values,
             # and normalize by height of slices
             voxel_grid_2d.heights = voxel_grid_2d.heights - height_lo
-            voxel_grid_2d.heights = voxel_grid_2d.min_heights - height_lo
+            voxel_grid_2d.min_heights = voxel_grid_2d.min_heights - height_lo
 
             height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
                 np.asarray(voxel_grid_2d.heights) / self.height_per_division
