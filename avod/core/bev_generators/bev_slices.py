@@ -105,8 +105,10 @@ class BevSlices(bev_generator.BevGenerator):
             #min_height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
             #    np.asarray(voxel_grid_2d.min_heights) / self.height_per_division
 
-            height_maps.append(height_map)
+            #height_maps.append(height_map) # Temporarily replaced by variance
             #height_maps.append(min_height_map)
+
+            height_maps.append(voxel_grid_2d.variance)
 
             density_map = self._create_density_map(
                 num_divisions=voxel_grid_2d.num_divisions,
