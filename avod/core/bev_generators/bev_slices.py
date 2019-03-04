@@ -112,7 +112,7 @@ class BevSlices(bev_generator.BevGenerator):
                                    voxel_grid_2d.num_divisions[2]))
 
             # Only update pixels where voxels have values
-            variance_map[voxel_indices[:, 0], voxel_indices[:, 1]] = np.asarray(voxel_grid_2d.variance)
+            variance_map[voxel_indices[:, 0], voxel_indices[:, 1]] = np.asarray(voxel_grid_2d.variance) / np.max(voxel_grid_2d.variance)
 
 
             height_maps.append(variance_map)
