@@ -162,7 +162,7 @@ class BevSlices(bev_generator.BevGenerator):
         """
 
         bev_maps = dict()
-        bev_maps['slice_maps'] = slice_maps_out
+        bev_maps['slice_maps'] = slice_maps
         bev_maps['cloud_maps'] = cloud_maps
 
         return bev_maps
