@@ -348,10 +348,10 @@ class KittiDataset:
                     bev_input = np.dstack((*slice_maps, *cloud_maps))
 
                 else:
-                    bev_input = slice_maps
+                    bev_input = np.dstack(slice_maps)
             
             else:
-                bev_input = cloud_maps
+                bev_input = np.dstack(cloud_maps)
 
             sample_dict = {
                 constants.KEY_LABEL_BOXES_3D: label_boxes_3d,
