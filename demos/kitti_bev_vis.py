@@ -110,8 +110,8 @@ def main():
     ground_plane = kitti_utils.get_ground_plane(sample_name)
     bev_images = kitti_utils.create_bev_maps(point_cloud, ground_plane)
 
-    height_maps = np.array(bev_images.get("height_maps"))
-    density_map = np.array(bev_images.get("density_map"))
+    slice_maps = np.array(bev_images.get("slice_maps"))
+    cloud_maps = np.array(bev_images.get("cloud_maps"))
 
     box_points, box_points_norm = [None, None]
     if show_ground_truth:
@@ -143,13 +143,13 @@ def main():
     vis_utils.cv2_show_image("Image", image,
                              size_wh=rgb_img_size, location_xy=(img_x, 0))
 
-    # Height maps
-    for map_idx in range(len(height_maps)):
-        height_map = height_maps[map_idx]
+    # Slice maps
+    for map_idx in range(len(slice_maps)):
+        slice_map = slice_maps[map_idx]
 
-        height_map = draw_boxes(height_map, box_points_norm)
+        slice_map = draw_boxes(slice_map, box_points_norm)
         vis_utils.cv2_show_image(
-            "Height Map {}".format(map_idx), height_map, size_wh=(
+            "Slice Map {}".format(map_idx), slice_map, size_wh=(
                 img_w, img_h), location_xy=(
                 img_x, img_y))
 
@@ -159,12 +159,21 @@ def main():
             img_x = img_x_start
             img_y += img_h + img_titlebar_h
 
-    # Density map
-    density_map = draw_boxes(density_map, box_points_norm)
-    vis_utils.cv2_show_image(
-        "Density Map", density_map, size_wh=(
-            img_w, img_h), location_xy=(
-            img_x, img_y))
+    # Cloud maps
+    for map_idx in range(len(cloud_maps)):
+        cloud_map = cloud_maps[map_idx]
+
+        cloud_map = draw_boxes(cloud_map, box_points_norm)
+        vis_utils.cv2_show_image(
+            "Cloud Map {}".format(map_idx), cloud_map, size_wh=(
+                img_w, img_h), location_xy=(
+                img_x, img_y))
+
+        img_x += img_w
+        # Wrap around
+        if (img_x + img_w) > 1920:
+            img_x = img_x_start
+            img_y += img_h + img_titlebar_h
 
     cv2.waitKey()
 

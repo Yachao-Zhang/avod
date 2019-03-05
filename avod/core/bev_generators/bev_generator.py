@@ -14,9 +14,9 @@ class BevGenerator:
                 specific implementations of BevGenerator.
 
         Returns:
-            Dictionary with entries for height maps and one density map
-                height_maps: list of height maps
-                density_map: density map
+            Dictionary with entries for slice maps and cloud maps
+                slice_maps: list of feature maps per slice
+                cloud_maps: list of feature maps for the whole point cloud
         """
         pass
 

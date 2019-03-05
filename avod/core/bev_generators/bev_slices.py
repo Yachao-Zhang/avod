@@ -23,6 +23,7 @@ class BevSlices(bev_generator.BevGenerator):
         self.height_lo = config.height_lo
         self.height_hi = config.height_hi
         self.num_slices = config.num_slices
+        self.slice_maps = config.slice_maps
 
         self.kitti_utils = kitti_utils
 
@@ -36,9 +37,7 @@ class BevSlices(bev_generator.BevGenerator):
                      ground_plane,
                      area_extents,
                      voxel_size):
-        """Generates the BEV maps dictionary. One height map is created for
-        each slice of the point cloud. One density map is created for
-        the whole point cloud.
+        """Generates the BEV maps dictionary. Generates specified feature maps for each slice or the whole point cloud.
 
         Args:
             source: point cloud source
@@ -50,14 +49,14 @@ class BevSlices(bev_generator.BevGenerator):
 
         Returns:
             BEV maps dictionary
-                height_maps: list of height maps
-                density_map: density map
+                slice_maps: list of feature maps per slice
+                cloud_maps: list of feature maps for the whole point cloud
         """
 
         all_points = np.transpose(point_cloud)
 
-        height_maps = []
-        density_maps = []
+        slice_maps = []
+        cloud_maps = []
 
         for slice_idx in range(self.num_slices):
 
@@ -82,7 +81,8 @@ class BevSlices(bev_generator.BevGenerator):
                     slice_points, voxel_size,
                     extents=area_extents,
                     ground_plane=ground_plane,
-                    create_leaf_layout=False)
+                    create_leaf_layout=False,
+                    slice_maps=self.slice_maps)
 
                 # Remove y values (all 0)
                 voxel_indices = voxel_grid_2d.voxel_indices[:, [0, 2]]
@@ -105,8 +105,8 @@ class BevSlices(bev_generator.BevGenerator):
             #min_height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
             #    np.asarray(voxel_grid_2d.min_heights) / self.height_per_division
 
-            #height_maps.append(height_map) # Temporarily replaced by variance
-            #height_maps.append(min_height_map)
+            #slice_maps.append(height_map) # Temporarily replaced by variance
+            #slice_maps.append(min_height_map)
 
             variance_map = np.zeros((voxel_grid_2d.num_divisions[0],
                                    voxel_grid_2d.num_divisions[2]))
@@ -115,7 +115,7 @@ class BevSlices(bev_generator.BevGenerator):
             variance_map[voxel_indices[:, 0], voxel_indices[:, 1]] = np.asarray(voxel_grid_2d.variance) # np.multiply(voxel_grid_2d.variance, voxel_grid_2d.num_pts_in_voxel))
             variance_map /= np.max(variance_map)
 
-            height_maps.append(variance_map)
+            slice_maps.append(variance_map)
 
             density_map = self._create_density_map(
                 num_divisions=voxel_grid_2d.num_divisions,
@@ -123,12 +123,12 @@ class BevSlices(bev_generator.BevGenerator):
                 num_pts_per_voxel=voxel_grid_2d.num_pts_in_voxel,
                 norm_value=self.NORM_VALUES[source])
 
-            density_maps.append(density_map)
+            slice_maps.append(density_map)
 
-        # Rotate height maps 90 degrees
+        # Rotate slice maps 90 degrees
         # (transpose and flip) is faster than np.rot90
-        height_maps_out = [np.flip(height_maps[map_idx].transpose(), axis=0)
-                           for map_idx in range(len(height_maps))]
+        slice_maps_out = [np.flip(slice_maps[map_idx].transpose(), axis=0)
+                           for map_idx in range(len(slice_maps))]
 
         """
         density_slice_filter = self.kitti_utils.create_slice_filter(
@@ -161,7 +161,7 @@ class BevSlices(bev_generator.BevGenerator):
         """
 
         bev_maps = dict()
-        bev_maps['height_maps'] = height_maps_out
-        bev_maps['density_map'] = density_maps
+        bev_maps['slice_maps'] = slice_maps_out
+        bev_maps['cloud_maps'] = cloud_maps
 
         return bev_maps
