@@ -344,7 +344,7 @@ class KittiDataset:
             slice_maps = bev_images.get('slice_maps')
             cloud_maps = bev_images.get('cloud_maps')
             if len(slice_maps) > 0:
-                if len(cloud_maps > 0):
+                if len(cloud_maps) > 0:
                     bev_input = np.dstack((*slice_maps, *cloud_maps))
 
                 else:
