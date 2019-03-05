@@ -73,8 +73,7 @@ class BevSlices(bev_generator.BevGenerator):
             # Apply slice filter
             slice_points = all_points[slice_filter]
 
-            if len(slice_points) > 1:
-
+            if len(slice_points) > 1:  # Should probably apply the fix for empty BEV slices
                 # Create Voxel Grid 2D
                 voxel_grid_2d = VoxelGrid2D()
                 voxel_grid_2d.voxelize_2d(
@@ -87,44 +86,59 @@ class BevSlices(bev_generator.BevGenerator):
                 # Remove y values (all 0)
                 voxel_indices = voxel_grid_2d.voxel_indices[:, [0, 2]]
 
-            # Create empty BEV images
-            #height_map = np.zeros((voxel_grid_2d.num_divisions[0],
-            #                       voxel_grid_2d.num_divisions[2]))
+            if "max" in self.slice_maps:
+                # Create empty BEV image
+                height_map = np.zeros((voxel_grid_2d.num_divisions[0],
+                                    voxel_grid_2d.num_divisions[2]))
 
-            #min_height_map = np.zeros((voxel_grid_2d.num_divisions[0],
-            #                       voxel_grid_2d.num_divisions[2]))
+                # Only update pixels where voxels have max height values,
+                # and normalize by height of slices
+                voxel_grid_2d.heights = voxel_grid_2d.heights - height_lo
 
-            # Only update pixels where voxels have max height values,
-            # and normalize by height of slices
-            #voxel_grid_2d.heights = voxel_grid_2d.heights - height_lo
-            #voxel_grid_2d.min_heights = voxel_grid_2d.min_heights - height_lo
+                height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
+                    np.asarray(voxel_grid_2d.heights) / self.height_per_division
 
-            #height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
-            #    np.asarray(voxel_grid_2d.heights) / self.height_per_division
+                height_map = np.flip(height_map.transpose(), axis=0)
 
-            #min_height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
-            #    np.asarray(voxel_grid_2d.min_heights) / self.height_per_division
+                slice_maps.append(height_map)
+                #slice_maps.append(min_height_map)
 
-            #slice_maps.append(height_map) # Temporarily replaced by variance
-            #slice_maps.append(min_height_map)
+            if "min" in self.slice_maps:
+                # Create empty BEV image
+                min_height_map = np.zeros((voxel_grid_2d.num_divisions[0],
+                                       voxel_grid_2d.num_divisions[2]))
 
-            variance_map = np.zeros((voxel_grid_2d.num_divisions[0],
-                                   voxel_grid_2d.num_divisions[2]))
+                # Only update pixels where voxels have max height values,
+                # and normalize by height of slices
+                voxel_grid_2d.min_heights = voxel_grid_2d.min_heights - height_lo
 
-            # Only update pixels where voxels have values
-            variance_map[voxel_indices[:, 0], voxel_indices[:, 1]] = np.asarray(voxel_grid_2d.variance) # np.multiply(voxel_grid_2d.variance, voxel_grid_2d.num_pts_in_voxel))
-            variance_map /= np.max(variance_map)
-            variance_map = np.flip(variance_map.transpose(), axis=0)
+                min_height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
+                    np.asarray(voxel_grid_2d.min_heights) / self.height_per_division
 
-            slice_maps.append(variance_map)
+                min_height_map = np.flip(min_height_map.transpose(), axis=0)
 
-            density_map = self._create_density_map(
-                num_divisions=voxel_grid_2d.num_divisions,
-                voxel_indices_2d=voxel_indices,
-                num_pts_per_voxel=voxel_grid_2d.num_pts_in_voxel,
-                norm_value=self.NORM_VALUES[source])
+                slice_maps.append(min_height_map)
 
-            slice_maps.append(density_map)
+            if "variance" in self.slice_maps:
+                #Create empty BEV image
+                variance_map = np.zeros((voxel_grid_2d.num_divisions[0],
+                                    voxel_grid_2d.num_divisions[2]))
+
+                # Only update pixels where voxels have values
+                variance_map[voxel_indices[:, 0], voxel_indices[:, 1]] = np.asarray(voxel_grid_2d.variance) # np.multiply(voxel_grid_2d.variance, voxel_grid_2d.num_pts_in_voxel))
+                variance_map /= np.max(variance_map)
+                variance_map = np.flip(variance_map.transpose(), axis=0)
+
+                slice_maps.append(variance_map)
+
+            if "density" in self.slice_maps:
+                density_map = self._create_density_map(
+                    num_divisions=voxel_grid_2d.num_divisions,
+                    voxel_indices_2d=voxel_indices,
+                    num_pts_per_voxel=voxel_grid_2d.num_pts_in_voxel,
+                    norm_value=self.NORM_VALUES[source])
+
+                slice_maps.append(density_map)
 
         # Rotate slice maps 90 degrees
         # (transpose and flip) is faster than np.rot90
