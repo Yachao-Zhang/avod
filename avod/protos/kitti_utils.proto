@@ -34,6 +34,6 @@ message BevGenerator {
         required int32 num_slices = 3;
 
         // Types of feature maps to generate per slice
-        repeated string slice_maps = 4 [default = ['max']];
+        repeated string slice_maps = 4;
     }
 }
