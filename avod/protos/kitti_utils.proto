@@ -35,5 +35,8 @@ message BevGenerator {
 
         // Types of feature maps to generate per slice
         repeated string slice_maps = 4;
+
+        // Types of feature maps to generate for entire point cloud
+        repeated string cloud_maps = 5;
     }
 }

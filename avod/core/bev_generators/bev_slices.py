@@ -24,6 +24,10 @@ class BevSlices(bev_generator.BevGenerator):
         self.height_hi = config.height_hi
         self.num_slices = config.num_slices
         self.slice_maps = config.slice_maps
+        self.cloud_maps = config.cloud_maps
+
+        print("slice maps: ", self.slice_maps)
+        print("cloud maps: ", self.cloud_maps)
 
         self.kitti_utils = kitti_utils
 
