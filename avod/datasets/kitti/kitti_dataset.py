@@ -345,15 +345,17 @@ class KittiDataset:
             cloud_maps = bev_images.get('cloud_maps')
             print(np.array(slice_maps).shape)
             print(np.array(cloud_maps).shape)
+            bev_maps = slice_maps + cloud_maps
+            print(np.array(bev_maps).shape)
             if len(slice_maps) > 0:
                 if len(cloud_maps) > 0:
                     bev_input = np.dstack((*slice_maps, *cloud_maps))
 
                 else:
-                    bev_input = np.dstack(tuple(*slice_maps))
+                    bev_input = np.dstack(tuple(slice_maps))
             
             else:
-                bev_input = np.dstack(tuple(*cloud_maps))
+                bev_input = np.dstack(tuple(cloud_maps))
 
             sample_dict = {
                 constants.KEY_LABEL_BOXES_3D: label_boxes_3d,
