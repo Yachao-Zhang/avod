@@ -114,6 +114,7 @@ class BevSlices(bev_generator.BevGenerator):
             # Only update pixels where voxels have values
             variance_map[voxel_indices[:, 0], voxel_indices[:, 1]] = np.asarray(voxel_grid_2d.variance) # np.multiply(voxel_grid_2d.variance, voxel_grid_2d.num_pts_in_voxel))
             variance_map /= np.max(variance_map)
+            variance_map = np.flip(variance_map.transpose(), axis=0)
 
             slice_maps.append(variance_map)
 
@@ -127,8 +128,8 @@ class BevSlices(bev_generator.BevGenerator):
 
         # Rotate slice maps 90 degrees
         # (transpose and flip) is faster than np.rot90
-        slice_maps_out = [np.flip(slice_maps[map_idx].transpose(), axis=0)
-                           for map_idx in range(len(slice_maps))]
+        #slice_maps_out = [np.flip(slice_maps[map_idx].transpose(), axis=0)
+        #                   for map_idx in range(len(slice_maps))]
 
         """
         density_slice_filter = self.kitti_utils.create_slice_filter(
