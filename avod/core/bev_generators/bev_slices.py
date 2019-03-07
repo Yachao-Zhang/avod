@@ -74,7 +74,7 @@ class BevSlices(bev_generator.BevGenerator):
             voxel_grid_2d.min_heights = voxel_grid_2d.min_heights - height_lo
 
             min_height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
-                np.asarray(voxel_grid_2d.min_heights) / self.height_per_division
+                np.asarray(voxel_grid_2d.min_heights) / slice_height
 
             min_height_map = np.flip(min_height_map.transpose(), axis=0)
 
@@ -100,7 +100,6 @@ class BevSlices(bev_generator.BevGenerator):
                 norm_value=self.NORM_VALUES[source])
 
             map_container.append(density_map)
-
 
 
     def generate_bev(self,
@@ -154,7 +153,7 @@ class BevSlices(bev_generator.BevGenerator):
                         extents=area_extents,
                         ground_plane=ground_plane,
                         create_leaf_layout=False,
-                        slice_maps=self.slice_maps)
+                        maps=self.slice_maps)
 
                     self.generate_bev_map(voxel_grid_2d, self.slice_maps, slice_maps, height_lo, height_hi, source)
 
@@ -176,7 +175,8 @@ class BevSlices(bev_generator.BevGenerator):
                     voxel_size,
                     extents=area_extents,
                     ground_plane=ground_plane,
-                    create_leaf_layout=False)
+                    create_leaf_layout=False,
+		    maps=self.cloud_maps)
 
                 self.generate_bev_map(voxel_grid_2d, self.cloud_maps, cloud_maps, self.height_lo, self.height_hi, source)
 
