@@ -58,7 +58,7 @@ def main():
 
     # Overwrite this to select a specific checkpoint
     global_step = None
-    checkpoint_name = 'pyramid_all_aug_2'
+    checkpoint_name = 'pyramid_all_aug_test'
 
     # Drawing Toggles
     draw_proposals_separate = False
