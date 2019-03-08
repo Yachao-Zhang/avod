@@ -23,7 +23,9 @@ def main():
     dataset_utils = dataset.kitti_utils
     num_samples = dataset.num_samples
     clusters, _ = dataset.get_cluster_info()
+    # Alter this?
     num_bev_maps = len(clusters) + 1  # Height Maps + Density Map
+    print("num_bev_maps ", num_bev_maps)
 
     pixels_sum = np.zeros(3)  # RGB
     bev_sum = np.zeros(num_bev_maps)
@@ -44,20 +46,20 @@ def main():
         if get_bev_mean:
             bev_images = dataset_utils.create_bev_maps(sample_name,
                                                        source='lidar')
-            height_maps = np.asarray(bev_images['height_maps'])
-            density_map = np.asarray(bev_images['density_map'])
+            slice_maps = np.asarray(bev_images['slice_maps'])
+            cloud_maps = np.asarray(bev_images['cloud_maps'])
 
-            height_means = [np.mean(height_map) for height_map in height_maps]
-            density_mean = np.mean(density_map)
+            slice_means = [np.mean(slice_map) for slice_map in slice_maps]
+            cloud_means = [np.mean(cloud_map) for cloud_map in cloud_maps]
 
-            bev_means = np.stack((*height_means, density_mean))
+            bev_means = np.stack((*slice_means, *cloud_means))
             bev_sum += bev_means
 
         if debug_print:
             debug_string = '{} / {}, Sample {}, pixel_means {}'.format(
                 sample_idx + 1, num_samples, sample_name, pixel_means)
             if get_bev_mean:
-                debug_string += ' density_means {}'.format(bev_means)
+                debug_string += ' bev_means {}'.format(bev_means)
 
             print(debug_string)
 
