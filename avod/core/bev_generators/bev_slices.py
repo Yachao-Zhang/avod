@@ -9,6 +9,7 @@ class BevSlices(bev_generator.BevGenerator):
 
     NORM_VALUES = {
         'lidar': np.log(16),
+        'distance': 1
     }
 
     def __init__(self, config, kitti_utils):
@@ -145,7 +146,7 @@ class BevSlices(bev_generator.BevGenerator):
                 # Apply slice filter
                 slice_points = all_points[slice_filter]
 
-                if len(slice_points) > 1:  # Should probably apply the fix for empty BEV slices
+                if len(slice_points) > 0:  # Should probably apply the fix for empty BEV slices
                     # Create Voxel Grid 2D
                     voxel_grid_2d = VoxelGrid2D()
                     voxel_grid_2d.voxelize_2d(
@@ -176,7 +177,7 @@ class BevSlices(bev_generator.BevGenerator):
                     extents=area_extents,
                     ground_plane=ground_plane,
                     create_leaf_layout=False,
-		    maps=self.cloud_maps)
+		            maps=self.cloud_maps)
 
                 self.generate_bev_map(voxel_grid_2d, self.cloud_maps, cloud_maps, self.height_lo, self.height_hi, source)
 
