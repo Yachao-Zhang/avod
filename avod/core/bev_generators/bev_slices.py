@@ -41,7 +41,7 @@ class BevSlices(bev_generator.BevGenerator):
         self.height_per_division = \
             (self.height_hi - self.height_lo) / self.num_slices
 
-    def generate_bev_map(self, voxel_grid_2d, map_config, map_container, height_lo, height_hi, source):
+    def generate_bev_map(self, voxel_grid_2d, map_config, map_container, height_lo, height_hi, area_extents, source):
         slice_height = height_hi - height_lo
 
         # Remove y values (all 0)
@@ -93,12 +93,17 @@ class BevSlices(bev_generator.BevGenerator):
 
             map_container.append(variance_map)
 
-        if "density" in map_config:
+        if "density" or "dnd" in map_config:
+            if "dnd" in map_config:
+                # Normalize distances by the maximum extent
+                self.NORM_VALUES["distance"] = voxel_grid_2d.distances / np.max(area_extents)
+
             density_map = self._create_density_map(
                 num_divisions=voxel_grid_2d.num_divisions,
                 voxel_indices_2d=voxel_indices,
                 num_pts_per_voxel=voxel_grid_2d.num_pts_in_voxel,
-                norm_value=self.NORM_VALUES[source])
+                norm_value=self.NORM_VALUES[source],
+                distance=self.NORM_VALUES["distance"])
 
             map_container.append(density_map)
 
@@ -156,7 +161,7 @@ class BevSlices(bev_generator.BevGenerator):
                         create_leaf_layout=False,
                         maps=self.slice_maps)
 
-                    self.generate_bev_map(voxel_grid_2d, self.slice_maps, slice_maps, height_lo, height_hi, source)
+                    self.generate_bev_map(voxel_grid_2d, self.slice_maps, slice_maps, height_lo, height_hi, area_extents, source)
 
         if len(self.cloud_maps) > 0:
             cloud_filter = self.kitti_utils.create_slice_filter(
