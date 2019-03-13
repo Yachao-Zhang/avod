@@ -93,8 +93,8 @@ class BevSlices(bev_generator.BevGenerator):
 
             map_container.append(variance_map)
 
-        if "density" or "dnd" in map_config:
-            if "dnd" in map_config:
+        if "density" in map_config or "dnd" in map_config:
+            if "dnd" in map_config: # Can't use both density and dnd in a single model like this
                 # Normalize distances by the maximum extent
                 self.NORM_VALUES["distance"] = voxel_grid_2d.distances / np.max(area_extents)
 
