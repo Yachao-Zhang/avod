@@ -86,13 +86,13 @@ def main(dataset=None):
         return
 
     car_dataset_config_path = avod.root_dir() + \
-        '/configs/mb_preprocessing/dnd_cars.config'
+        '/configs/mb_preprocessing/rpn_cars.config'
     ped_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/rpn_pedestrians.config'
     cyc_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/rpn_cyclists.config'
     ppl_dataset_config_path = avod.root_dir() + \
-        '/configs/mb_preprocessing/bev_people_density.config'
+        '/configs/mb_preprocessing/rpn_people.config'
     all_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/test_all.config'
 
@@ -102,10 +102,10 @@ def main(dataset=None):
     # Serial vs parallel processing
     in_parallel = True
 
-    process_car = True   # Cars
+    process_car = False   # Cars
     process_ped = False  # Pedestrians
     process_cyc = False  # Cyclists
-    process_ppl = False   # People (Pedestrians + Cyclists)
+    process_ppl = True   # People (Pedestrians + Cyclists)
     process_all = False # Cars + Pedestrians + Cyclists
 
     # Number of child processes to fork, samples will
