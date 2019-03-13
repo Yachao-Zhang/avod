@@ -184,7 +184,7 @@ class BevSlices(bev_generator.BevGenerator):
                     create_leaf_layout=False,
 		            maps=self.cloud_maps)
 
-                self.generate_bev_map(voxel_grid_2d, self.cloud_maps, cloud_maps, self.height_lo, self.height_hi, source)
+                self.generate_bev_map(voxel_grid_2d, self.cloud_maps, cloud_maps, self.height_lo, self.height_hi, area_extents, source)
 
         bev_maps = dict()
         bev_maps['slice_maps'] = slice_maps
