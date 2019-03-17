@@ -188,6 +188,11 @@ python3 avod/experiments/run_inference.py --checkpoint_name='pyramid_cars_with_a
 ```
 The `ckpt_indices` here indicates the indices of the checkpoint in the list. If the `checkpoint_interval` inside your config is `1000`, to evaluate checkpoints `116000` and `120000`, the indices should be `--ckpt_indices=116 120`. You can also just set this to `-1` to evaluate the last checkpoint.
 
+To run inference on a separate test set with a preptrained model make sure to have the config set to use the cluster and data split from the data the network was trained on ("train"). Data_split_dir must point to the root folder where the test set is located (such as "TestSet/object"), then run:
+```bash
+python3 avod/experiments/run_inference.py --checkpoint_name='name_of_model' --data_split='test' --ckpt_indices=-1 --device='0'
+```
+
 ### Viewing Results
 All results should be saved in `avod/data/outputs`. Here you should see `proposals_and_scores` and `final_predictions_and_scores` results. To visualize these results, you can run `demos/show_predictions_2d.py`. The script needs to be configured to your specific experiments. The `scripts/offline_eval/plot_ap.py` will plot the AP vs. step, and print the 5 highest performing checkpoints for each evaluation metric at the moderate difficulty.
 
