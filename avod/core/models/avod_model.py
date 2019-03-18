@@ -656,6 +656,13 @@ class AvodModel(model.DetectionModel):
         self.sample_info = self._rpn_model.sample_info
         return feed_dict
 
+    def create_pred_feed_dict(self, image, point_cloud, frame_calib):
+        """ This method is used to create a feed dict when the model is used in an on-line fashion """
+        feed_dict = self._rpn_model.create_pred_feed_dict(
+            image, point_cloud, frame_calib)
+        self.sample_info = self._rpn_model.sample_info
+        return feed_dict
+
     def loss(self, prediction_dict):
         # Note: The loss should be using mini-batch values only
         loss_dict, rpn_loss = self._rpn_model.loss(prediction_dict)

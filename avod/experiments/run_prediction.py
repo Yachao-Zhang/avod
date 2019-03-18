@@ -83,13 +83,10 @@ class AvodInstance:
                 self.get_avod_predicted_boxes_3d_and_scores(predictions,
                                                             box_rep)
 
-            # print(proposals_and_scores)
-            # print(predictions_and_scores)
             print("Attempting to draw predictions")
-            # TODO: Write these detections to the image instead of giving these scores
-            # np.savetxt("rpn_file_path", proposals_and_scores, fmt='%.3f')
-            # np.savetxt("avod_file_path", predictions_and_scores, fmt='%.5f')
-            self._draw_predictions(image, predictions_and_scores, frame_calib)
+
+            drawn_image = self._draw_predictions(
+                image, predictions_and_scores, frame_calib)
 
     def _draw_predictions(self, image, predictions_and_scores, frame_calib):
         """ This code draws the bounding boxes with score threshold above the given threshold onto the image.
@@ -146,19 +143,19 @@ class AvodInstance:
         # Plot the image
         ax.imshow(image)
         # Draw predictions over image
-        draw_3d_predictions(filtered_gt_objs,
-                            frame_calib.p2,
-                            num_of_predictions,
-                            final_prediction_objs,
-                            final_class_indices,
-                            final_boxes_2d,
-                            ax,
-                            draw_orientations_on_pred)
+        return draw_3d_predictions(filtered_gt_objs,
+                                   frame_calib.p2,
+                                   num_of_predictions,
+                                   final_prediction_objs,
+                                   final_class_indices,
+                                   final_boxes_2d,
+                                   ax,
+                                   draw_orientations_on_pred, image)
 
     def _create_fig(self, image):
         """ Creates fig and ax object """
         # Create the figure'
-        fig, ax = plt.subplots(1, figsize=image.shape[:2], facecolor='black')
+        fig, ax = plt.subplots(1, facecolor='black')
         fig.subplots_adjust(left=0.0, bottom=0.0, right=1.0, top=1.0,
                             hspace=0.0, wspace=0.0)
         # Set axes settings
@@ -372,7 +369,7 @@ def draw_3d_predictions(filtered_gt_objs,
                         prediction_class,
                         final_boxes,
                         pred_3d_axes,
-                        draw_orientations_on_pred):
+                        draw_orientations_on_pred, image=None):
     BOX_COLOUR_SCHEME = {
         'Car': '#00FF00',           # Green
         'Pedestrian': '#00FFFF',    # Teal
@@ -384,20 +381,15 @@ def draw_3d_predictions(filtered_gt_objs,
         pred_class_idx = prediction_class[pred_idx]
 
         rgb_box_2d = final_boxes[pred_idx]
-
         box_x1 = rgb_box_2d[0]
         box_y1 = rgb_box_2d[1]
-
         # Draw 3D boxes
         box_cls = gt_classes[int(pred_class_idx)]
 
-        vis_utils.draw_box_3d(pred_3d_axes, pred_obj, p_matrix,
-                              show_orientation=draw_orientations_on_pred,
-                              color_table=['#00FF00', 'y', 'r', 'w'],
-                              line_width=2,
-                              double_line=False,
-                              box_color=BOX_COLOUR_SCHEME[box_cls])
-    plt.savefig("testingpleasework.png")
+        vis_utils.cv_draw_box_3d(
+            image, pred_obj, p_matrix, show_orientation=True)
+    cv2.imwrite("test.png", image)
+    return image
 
 
 def create_framecalib(from_pandora=True):
@@ -433,6 +425,6 @@ if __name__ == "__main__":
     pointcloud = model.load_point_cloud(
         "/notebooks/DATA/Kitti/object/testing/velodyne/000001.bin")
     pointcloud = model._get_point_cloud(image.shape, pointcloud, frame_calib)
-    print("loaded pointcloud: ", pointcloud)
+    #print("loaded pointcloud: ", pointcloud)
 
     model.predict(image, pointcloud, frame_calib)

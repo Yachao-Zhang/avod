@@ -368,6 +368,55 @@ class KittiDataset:
 
         return sample_dicts
 
+    def load_pred_sample(self, rgb_image, point_cloud, frame_calib):
+        """ This method is used for on-line prediction in the Avod model. 
+            It tries to mimic the effects of load samples, but instead of loading from an index, it takes and image and lidar point cloud as arguments.
+            Returns one sample_dict
+        """
+        obj_labels = None
+
+        anchors_info = []
+
+        label_anchors = np.zeros((1, 6))
+        label_boxes_3d = np.zeros((1, 7))
+        label_classes = np.zeros(1)
+
+        image_shape = rgb_image.shape[0:2]
+        image_input = rgb_image
+
+        # Get ground plane TODO: This should be calculated when we have IMU input from vehicle. For now, just use kitti road plane index 0
+        ground_plane = obj_utils.get_road_plane(0,
+                                                self.planes_dir)
+
+        # Create BEV maps
+        bev_images = self.kitti_utils.create_bev_maps(
+            point_cloud, ground_plane)
+
+        slice_maps = bev_images.get('slice_maps')
+        cloud_maps = bev_images.get('cloud_maps')
+        bev_maps = slice_maps + cloud_maps
+
+        bev_input = np.dstack(bev_maps)
+
+        sample_dict = {
+            constants.KEY_LABEL_BOXES_3D: label_boxes_3d,
+            constants.KEY_LABEL_ANCHORS: label_anchors,
+            constants.KEY_LABEL_CLASSES: label_classes,
+
+            constants.KEY_IMAGE_INPUT: image_input,
+            constants.KEY_BEV_INPUT: bev_input,
+
+            constants.KEY_ANCHORS_INFO: anchors_info,
+
+            constants.KEY_POINT_CLOUD: point_cloud,
+            constants.KEY_GROUND_PLANE: ground_plane,
+            constants.KEY_STEREO_CALIB_P2: frame_calib.p2,
+
+            constants.KEY_SAMPLE_NAME: 0,  # TODO: Find out how this is used later
+            constants.KEY_SAMPLE_AUGS: []  # We don't need any augs for prediction
+        }
+        return sample_dict
+
     def _shuffle_samples(self):
         perm = np.arange(self.num_samples)
         np.random.shuffle(perm)
