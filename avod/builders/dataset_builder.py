@@ -26,7 +26,7 @@ class DatasetBuilder(object):
 
     KITTI_TRAIN = KittiDatasetConfig(
         name="kitti",
-        dataset_dir='/notebooks/DATA/Kitti/object',
+        dataset_dir='/notebooks/Kitti_DATA/DATA/',
         data_split="train",
         data_split_dir="training",
         has_labels=True,
@@ -48,7 +48,7 @@ class DatasetBuilder(object):
 
     KITTI_TEST = KittiDatasetConfig(
         name="kitti",
-        dataset_dir='/notebooks/DATA/Kitti/object',
+        dataset_dir='/notebooks/DATA/Carla/object2',
         data_split="test",
         data_split_dir="testing",
         has_labels=False,
