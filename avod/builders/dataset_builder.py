@@ -13,6 +13,7 @@ class DatasetBuilder(object):
     Static class to return preconfigured dataset objects
     """
 
+    # Do not alter these, make new ones
     KITTI_UNITTEST = KittiDatasetConfig(
         name="unittest-kitti",
         dataset_dir=avod.root_dir() + "/tests/datasets/Kitti/object",
