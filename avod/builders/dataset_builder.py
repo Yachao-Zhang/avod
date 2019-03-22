@@ -13,6 +13,7 @@ class DatasetBuilder(object):
     Static class to return preconfigured dataset objects
     """
 
+    # Do not alter these, make new ones
     KITTI_UNITTEST = KittiDatasetConfig(
         name="unittest-kitti",
         dataset_dir=avod.root_dir() + "/tests/datasets/Kitti/object",
@@ -26,7 +27,7 @@ class DatasetBuilder(object):
 
     KITTI_TRAIN = KittiDatasetConfig(
         name="kitti",
-        dataset_dir='/notebooks/Kitti_DATA/DATA/',
+        dataset_dir='/notebooks/DATA/Kitti/object',
         data_split="train",
         data_split_dir="training",
         has_labels=True,
@@ -48,7 +49,7 @@ class DatasetBuilder(object):
 
     KITTI_TEST = KittiDatasetConfig(
         name="kitti",
-        dataset_dir='/notebooks/DATA/Carla/object2',
+        dataset_dir='/notebooks/DATA/Kitti/object',
         data_split="test",
         data_split_dir="testing",
         has_labels=False,
