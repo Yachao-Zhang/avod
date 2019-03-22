@@ -467,7 +467,7 @@ class RpnModel(model.DetectionModel):
             # Decode anchor regression offsets
             with tf.variable_scope('decoding'):
                 regressed_anchors = anchor_encoder.offset_to_anchor(
-                        anchors, offsets)
+                    anchors, offsets)
 
             with tf.variable_scope('bev_projection'):
                 _, bev_proposal_boxes_norm = anchor_projector.project_to_bev(
@@ -668,6 +668,69 @@ class RpnModel(model.DetectionModel):
             # Only handle one sample at a time for now
             sample = samples[0]
             anchors_info = sample.get(constants.KEY_ANCHORS_INFO)
+
+        sample_name = sample.get(constants.KEY_SAMPLE_NAME)
+        sample_augs = sample.get(constants.KEY_SAMPLE_AUGS)
+
+        # Get ground truth data
+        label_anchors = sample.get(constants.KEY_LABEL_ANCHORS)
+        label_classes = sample.get(constants.KEY_LABEL_CLASSES)
+        # We only need orientation from box_3d
+        label_boxes_3d = sample.get(constants.KEY_LABEL_BOXES_3D)
+
+        # Network input data
+        image_input = sample.get(constants.KEY_IMAGE_INPUT)
+        bev_input = sample.get(constants.KEY_BEV_INPUT)
+
+        # Image shape (h, w)
+        image_shape = [image_input.shape[0], image_input.shape[1]]
+
+        ground_plane = sample.get(constants.KEY_GROUND_PLANE)
+        stereo_calib_p2 = sample.get(constants.KEY_STEREO_CALIB_P2)
+
+        # Fill the placeholders for anchor information
+        self._fill_anchor_pl_inputs(anchors_info=anchors_info,
+                                    ground_plane=ground_plane,
+                                    image_shape=image_shape,
+                                    stereo_calib_p2=stereo_calib_p2,
+                                    sample_name=sample_name,
+                                    sample_augs=sample_augs)
+
+        # this is a list to match the explicit shape for the placeholder
+        self._placeholder_inputs[self.PL_IMG_IDX] = [int(sample_name)]
+
+        # Fill in the rest
+        self._placeholder_inputs[self.PL_BEV_INPUT] = bev_input
+        self._placeholder_inputs[self.PL_IMG_INPUT] = image_input
+
+        self._placeholder_inputs[self.PL_LABEL_ANCHORS] = label_anchors
+        self._placeholder_inputs[self.PL_LABEL_BOXES_3D] = label_boxes_3d
+        self._placeholder_inputs[self.PL_LABEL_CLASSES] = label_classes
+
+        # Sample Info
+        # img_idx is a list to match the placeholder shape
+        self._placeholder_inputs[self.PL_IMG_IDX] = [int(sample_name)]
+        self._placeholder_inputs[self.PL_CALIB_P2] = stereo_calib_p2
+        self._placeholder_inputs[self.PL_GROUND_PLANE] = ground_plane
+
+        # Temporary sample info for debugging
+        self.sample_info.clear()
+        self.sample_info['sample_name'] = sample_name
+        self.sample_info['rpn_mini_batch'] = anchors_info
+
+        # Create a feed_dict and fill it with input values
+        feed_dict = dict()
+        for key, value in self.placeholders.items():
+            feed_dict[value] = self._placeholder_inputs[key]
+
+        return feed_dict
+
+    def create_pred_feed_dict(self, image, point_cloud, frame_calib):
+        """ This method is used to create a feed dict when the model is used in an on-line fashion.
+        It tries to mimic the effects of self._create_feed_dict(), but requires input images and lidar instead of path to files.
+        It uses a modified version of the dataset.next_batch method (dataset.load_pred_sample()) in order to get the correct sample format. """
+        sample = self.dataset.load_pred_sample(image, point_cloud, frame_calib)
+        anchors_info = sample.get(constants.KEY_ANCHORS_INFO)
 
         sample_name = sample.get(constants.KEY_SAMPLE_NAME)
         sample_augs = sample.get(constants.KEY_SAMPLE_AUGS)
