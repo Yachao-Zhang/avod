@@ -138,7 +138,7 @@ def main(dataset=None):
     if process_all:
         all_dataset = DatasetBuilder.load_dataset_from_config(
             all_dataset_config_path)
-    if process_ped:
+    if process_per:
         per_dataset = DatasetBuilder.load_dataset_from_config(
             per_dataset_config_path)
 
