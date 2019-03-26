@@ -216,12 +216,12 @@ def main(dataset=None):
 
         # Person (Pedestrians + Cyclists joint class)
         if process_per:
-            ppl_indices_split = split_indices(ppl_dataset, num_ppl_children)
+            per_indices_split = split_indices(per_dataset, num_per_children)
             split_work(
                 all_child_pids,
-                ppl_dataset,
-                ppl_indices_split,
-                num_ppl_children)
+                per_dataset,
+                per_indices_split,
+                num_per_children)
 
         # Wait to child processes to finish
         print('num children:', len(all_child_pids))
