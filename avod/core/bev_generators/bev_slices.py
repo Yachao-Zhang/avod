@@ -48,37 +48,11 @@ class BevSlices(bev_generator.BevGenerator):
         voxel_indices = voxel_grid_2d.voxel_indices[:, [0, 2]]
 
         if "max" in map_config:
-            # Create empty BEV image
-            height_map = np.zeros((voxel_grid_2d.num_divisions[0],
-                                voxel_grid_2d.num_divisions[2]))
-
-            # Only update pixels where voxels have max height values,
-            # and normalize by height of slices
-            voxel_grid_2d.heights = voxel_grid_2d.heights - height_lo
-
-            height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
-                np.asarray(voxel_grid_2d.heights) / slice_height
-
-            # Rotates slice map 90 degrees
-            # (transpose and flip) is faster than np.rot90
-            height_map = np.flip(height_map.transpose(), axis=0)
-
+            height_map = self.get_height_map(voxel_grid_2d, "max")
             map_container.append(height_map)
 
         if "min" in map_config:
-            # Create empty BEV image
-            min_height_map = np.zeros((voxel_grid_2d.num_divisions[0],
-                                voxel_grid_2d.num_divisions[2]))
-
-            # Only update pixels where voxels have max height values,
-            # and normalize by height of slices
-            voxel_grid_2d.min_heights = voxel_grid_2d.min_heights - height_lo
-
-            min_height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
-                np.asarray(voxel_grid_2d.min_heights) / slice_height
-
-            min_height_map = np.flip(min_height_map.transpose(), axis=0)
-
+            min_height_map = self.get_height_map(voxel_grid_2d, "min")
             map_container.append(min_height_map)
 
         if "variance" in map_config:
@@ -107,6 +81,27 @@ class BevSlices(bev_generator.BevGenerator):
 
             map_container.append(density_map)
 
+        if "cluster" in map_config:
+            # Add highest point of all clusters
+            cluster_height_map = self.get_height_map(voxel_grid_2d, "cluster_max")
+            map_container.append(cluster_height_map)
+
+            # Add lowest point of all clusters
+            cluster_min_height_map = self.get_height_map(voxel_grid_2d, "cluster_min")
+            map_container.append(cluster_min_height_map)
+
+            # Remove y values (all 0)
+            cluster_indices = voxel_grid_2d.cluster_indices[:, [0, 2]]
+
+            cluster_density_map = self._create_density_map(
+                num_divisions=voxel_grid_2d.num_divisions,
+                voxel_indices_2d=cluster_indices,
+                num_pts_per_voxel=voxel_grid_2d.num_pts_in_cluster,
+                norm_value=self.NORM_VALUES[source],
+                distance=self.NORM_VALUES["distance"])
+
+            map_container.append(cluster_density_map)
+            
 
     def generate_bev(self,
                      source,
@@ -191,3 +186,31 @@ class BevSlices(bev_generator.BevGenerator):
         bev_maps['cloud_maps'] = cloud_maps
 
         return bev_maps
+
+    def get_height_map(self, voxel_grid_2d, height_type):
+        # Create empty BEV image
+        height_map = np.zeros((voxel_grid_2d.num_divisions[0],
+                            voxel_grid_2d.num_divisions[2]))
+
+        # Only update pixels where voxels have height values,
+        # and normalize by height of slices
+        if height_type == "max":
+            heights = voxel_grid_2d.heights - height_lo
+
+        else if height_type == "min":
+            heights = voxel_grid_2d.min_heights - height_lo
+
+        else if height_type == "cluster_max":
+            heights = voxel_grid_2d.cluster_heights - height_lo
+
+        else if height_type == "cluster_min":
+            heights = voxel_grid_2d.cluster_min_heights - height_lo
+
+        height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
+            np.asarray(heights) / slice_height
+
+        # Rotates slice map 90 degrees
+        # (transpose and flip) is faster than np.rot90
+        height_map = np.flip(height_map.transpose(), axis=0)
+
+        return height_map
