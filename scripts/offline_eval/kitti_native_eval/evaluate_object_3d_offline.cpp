@@ -52,7 +52,7 @@ const int NUM_CLASS = 4;
 // parameters varying per class
 vector<string> CLASS_NAMES;
 // the minimum overlap required for 2D evaluation on the image/ground plane and 3D evaluation
-const double MIN_OVERLAP[3][3] = {{0.7, 0.5, 0.5, 0.5}, {0.7, 0.5, 0.5, 0.5}, {0.7, 0.5, 0.5, 0.5}};
+const double MIN_OVERLAP[3][4] = {{0.7, 0.5, 0.5, 0.5}, {0.7, 0.5, 0.5, 0.5}, {0.7, 0.5, 0.5, 0.5}};
 
 // no. of recall steps that should be evaluated (discretized)
 const double N_SAMPLE_PTS = 41;
