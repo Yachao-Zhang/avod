@@ -197,13 +197,13 @@ class BevSlices(bev_generator.BevGenerator):
         if height_type == "max":
             heights = voxel_grid_2d.heights - height_lo
 
-        else if height_type == "min":
+        elif height_type == "min":
             heights = voxel_grid_2d.min_heights - height_lo
 
-        else if height_type == "cluster_max":
+        elif height_type == "cluster_max":
             heights = voxel_grid_2d.cluster_heights - height_lo
 
-        else if height_type == "cluster_min":
+        elif height_type == "cluster_min":
             heights = voxel_grid_2d.cluster_min_heights - height_lo
 
         height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = \
