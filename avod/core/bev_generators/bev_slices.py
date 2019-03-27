@@ -195,7 +195,7 @@ class BevSlices(bev_generator.BevGenerator):
         # Only update pixels where voxels have height values,
         # and normalize by height of slices
         norm_heights = heights - height_lo
-        height_map[voxeL_indices[:, 0], voxel_indices[:, 1]] = np.asarray(norm_heights) / slice_height
+        height_map[voxel_indices[:, 0], voxel_indices[:, 1]] = np.asarray(norm_heights) / slice_height
 
         # Rotates slice map 90 degrees
         # (transpose and flip) is faster than np.rot90
