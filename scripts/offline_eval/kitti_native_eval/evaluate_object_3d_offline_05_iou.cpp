@@ -46,13 +46,13 @@ const int32_t MAX_OCCLUSION[3]  = {0, 1, 2};        // maximum occlusion level o
 const double  MAX_TRUNCATION[3] = {0.15, 0.3, 0.5}; // maximum truncation level of the groundtruth used for evaluation
 
 // evaluated object classes
-enum CLASSES{CAR=0, PEDESTRIAN=1, CYCLIST=2};
-const int NUM_CLASS = 3;
+enum CLASSES{CAR=0, PEDESTRIAN=1, CYCLIST=2, PERSON=3};
+const int NUM_CLASS = 4;
 
 // parameters varying per class
 vector<string> CLASS_NAMES;
 // the minimum overlap required for 2D evaluation on the image/ground plane and 3D evaluation
-const double MIN_OVERLAP[3][3] = {{0.7, 0.5, 0.5}, {0.5, 0.25, 0.25}, {0.5, 0.25, 0.25}};
+const double MIN_OVERLAP[3][3] = {{0.7, 0.5, 0.5, 0.5}, {0.5, 0.25, 0.25, 0.25}, {0.5, 0.25, 0.25, 0.25}};
 
 // no. of recall steps that should be evaluated (discretized)
 const double N_SAMPLE_PTS = 41;
@@ -62,6 +62,7 @@ void initGlobals () {
   CLASS_NAMES.push_back("car");
   CLASS_NAMES.push_back("pedestrian");
   CLASS_NAMES.push_back("cyclist");
+  CLASS_NAMES.push_back("person");
 }
 
 /*=======================================================================
