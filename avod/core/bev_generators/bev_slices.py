@@ -38,8 +38,7 @@ class BevSlices(bev_generator.BevGenerator):
         self.kitti_utils = kitti_utils
 
         # Pre-calculated values
-        self.height_per_division = \
-            (self.height_hi - self.height_lo) / self.num_slices
+        self.height_per_division = (self.height_hi - self.height_lo) / self.num_slices
 
 
     def generate_bev_map(self, voxel_grid_2d, map_config, map_container, height_lo, height_hi, area_extents, source):
@@ -85,19 +84,19 @@ class BevSlices(bev_generator.BevGenerator):
 
         if "cluster" in map_config:
             # Remove y values (all 0)
-            cluster_indices = voxel_grid_2d.cluster_indices[:, [0, 2]]
+            cluster_voxel_indices = voxel_grid_2d.cluster_voxel_indices[:, [0, 2]]
             
             # Add highest point of all clusters
-            cluster_height_map = self.get_height_map(voxel_grid_2d.cluster_heights, height_lo, slice_height, num_divisions, cluster_indices)
+            cluster_height_map = self.get_height_map(voxel_grid_2d.cluster_heights, height_lo, slice_height, num_divisions, cluster_voxel_indices)
             map_container.append(cluster_height_map)
 
             # Add lowest point of all clusters
-            cluster_min_height_map = self.get_height_map(voxel_grid_2d.cluster_min_heights, height_lo, slice_height, num_divisions, cluster_indices)
+            cluster_min_height_map = self.get_height_map(voxel_grid_2d.cluster_min_heights, height_lo, slice_height, num_divisions, cluster_voxel_indices)
             map_container.append(cluster_min_height_map)
 
             cluster_density_map = self._create_density_map(
                 num_divisions=voxel_grid_2d.num_divisions,
-                voxel_indices_2d=cluster_indices,
+                voxel_indices_2d=cluster_voxel_indices,
                 num_pts_per_voxel=voxel_grid_2d.num_pts_in_cluster,
                 norm_value=self.NORM_VALUES[source],
                 distance=self.NORM_VALUES["distance"])
@@ -189,14 +188,14 @@ class BevSlices(bev_generator.BevGenerator):
 
         return bev_maps
 
-    def get_height_map(self, heights, height_lo, slice_height, num_divisions, indices):
+    def get_height_map(self, heights, height_lo, slice_height, num_divisions, voxel_indices):
         # Create empty BEV image
         height_map = np.zeros((num_divisions[0], num_divisions[2]))
 
         # Only update pixels where voxels have height values,
         # and normalize by height of slices
         norm_heights = heights - height_lo
-        height_map[indices[:, 0], indices[:, 1]] = np.asarray(norm_heights) / slice_height
+        height_map[voxeL_indices[:, 0], voxel_indices[:, 1]] = np.asarray(norm_heights) / slice_height
 
         # Rotates slice map 90 degrees
         # (transpose and flip) is faster than np.rot90
