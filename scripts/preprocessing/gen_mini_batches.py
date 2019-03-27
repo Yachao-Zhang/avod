@@ -96,7 +96,7 @@ def main(dataset=None):
     all_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/test_all.config'
     per_dataset_config_path = avod.root_dir() + \
-        '/configs/mb_preprocessing/person_max_density.config'
+        '/configs/mb_preprocessing/rpn_person.config'
 
     ##############################
     # Options
@@ -104,12 +104,12 @@ def main(dataset=None):
     # Serial vs parallel processing
     in_parallel = True
 
-    process_car = True   # Cars
+    process_car = False   # Cars
     process_ped = False # Pedestrians
     process_cyc = False  # Cyclists
     process_ppl = False   # People (Pedestrians + Cyclists)
     process_all = False # Cars + Pedestrians + Cyclists
-    process_per = False   # Person (Pedestrians + Cyclists joint class)
+    process_per = True   # Person (Pedestrians + Cyclists joint class)
 
     # Number of child processes to fork, samples will
     #  be divided evenly amongst the processes (in_parallel must be True)
