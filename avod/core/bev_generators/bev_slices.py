@@ -41,6 +41,7 @@ class BevSlices(bev_generator.BevGenerator):
         self.height_per_division = \
             (self.height_hi - self.height_lo) / self.num_slices
 
+
     def generate_bev_map(self, voxel_grid_2d, map_config, map_container, height_lo, height_hi, area_extents, source):
         slice_height = height_hi - height_lo
 
@@ -48,11 +49,11 @@ class BevSlices(bev_generator.BevGenerator):
         voxel_indices = voxel_grid_2d.voxel_indices[:, [0, 2]]
 
         if "max" in map_config:
-            height_map = self.get_height_map(voxel_grid_2d, "max")
+            height_map = self.get_height_map(voxel_grid_2d, height_lo, "max")
             map_container.append(height_map)
 
         if "min" in map_config:
-            min_height_map = self.get_height_map(voxel_grid_2d, "min")
+            min_height_map = self.get_height_map(voxel_grid_2d, height_lo, "min")
             map_container.append(min_height_map)
 
         if "variance" in map_config:
@@ -83,11 +84,11 @@ class BevSlices(bev_generator.BevGenerator):
 
         if "cluster" in map_config:
             # Add highest point of all clusters
-            cluster_height_map = self.get_height_map(voxel_grid_2d, "cluster_max")
+            cluster_height_map = self.get_height_map(voxel_grid_2d, height_lo, "cluster_max")
             map_container.append(cluster_height_map)
 
             # Add lowest point of all clusters
-            cluster_min_height_map = self.get_height_map(voxel_grid_2d, "cluster_min")
+            cluster_min_height_map = self.get_height_map(voxel_grid_2d, height_lo, "cluster_min")
             map_container.append(cluster_min_height_map)
 
             # Remove y values (all 0)
@@ -187,7 +188,7 @@ class BevSlices(bev_generator.BevGenerator):
 
         return bev_maps
 
-    def get_height_map(self, voxel_grid_2d, height_type):
+    def get_height_map(self, voxel_grid_2d, height_lo, height_type):
         # Create empty BEV image
         height_map = np.zeros((voxel_grid_2d.num_divisions[0],
                             voxel_grid_2d.num_divisions[2]))
