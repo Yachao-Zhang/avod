@@ -86,7 +86,7 @@ def main(dataset=None):
         return
 
     car_dataset_config_path = avod.root_dir() + \
-        '/configs/mb_preprocessing/cars_cluster.config'
+        '/configs/mb_preprocessing/carla_cars_max_density.config'
     ped_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/pedestrians_max_density.config'
     cyc_dataset_config_path = avod.root_dir() + \
