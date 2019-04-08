@@ -284,7 +284,7 @@ def copy_kitti_native_code(checkpoint_name):
         os.makedirs(results_05_dir)
 
 
-def run_kitti_native_script(checkpoint_name, score_threshold, global_step):
+def run_kitti_native_script(checkpoint_name, score_threshold, global_step, dataset_name='Kitti'):
     """Runs the kitti native code script."""
 
     eval_script_dir = avod.root_dir() + '/data/outputs/' + \
@@ -303,11 +303,11 @@ def run_kitti_native_script(checkpoint_name, score_threshold, global_step):
                      str(score_threshold),
                      str(global_step),
                      str(checkpoint_name),
-                     str(results_dir)])
+                     str(results_dir),
+                     str(dataset_name)])
 
 
-def run_kitti_native_script_with_05_iou(checkpoint_name, score_threshold,
-                                        global_step):
+def run_kitti_native_script_with_05_iou(checkpoint_name, score_threshold, global_step, dataset_name='Kitti'):
     """Runs the kitti native code script."""
 
     eval_script_dir = avod.root_dir() + '/data/outputs/' + \
@@ -326,4 +326,5 @@ def run_kitti_native_script_with_05_iou(checkpoint_name, score_threshold,
                      str(score_threshold),
                      str(global_step),
                      str(checkpoint_name),
-                     str(results_dir)])
+                     str(results_dir),
+                     str(dataset_name)])

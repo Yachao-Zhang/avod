@@ -9,5 +9,5 @@ folders=$(ls ./$1/ | sort -V)
 for folder in $folders
 do
 	echo "$folder" | tee -a ./results_$1.txt
-	./evaluate_object_3d_offline /notebooks/DATA/Kitti/object/training/label_2/ $1/$folder | tee -a ./results_$1.txt
+	./evaluate_object_3d_offline /notebooks/DATA/$2/object/training/label_2/ $1/$folder | tee -a ./results_$1.txt
 done

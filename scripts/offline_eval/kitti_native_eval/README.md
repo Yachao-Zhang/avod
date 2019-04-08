@@ -21,7 +21,7 @@ make
 
 3. Run the evaluation on all steps in the folder, for example:
 ```
-./all_eval.sh 0.5
+./all_eval.sh 0.5 Kitti
 ```
 ---
 Alternatively, you can run the evaluation using the following command on a single step:
