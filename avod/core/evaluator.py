@@ -1189,15 +1189,15 @@ class Evaluator:
 
         checkpoint_name = self.model_config.checkpoint_name
         kitti_score_threshold = self.eval_config.kitti_score_threshold
-        dataset_name = self.dataset_config.name.capitalize()
+        dataset_dir = self.dataset_config.dataset_dir
 
         # Create a separate processes to run the native evaluation
         native_eval_proc = Process(
             target=evaluator_utils.run_kitti_native_script, args=(
-                checkpoint_name, kitti_score_threshold, global_step, dataset_name))
+                checkpoint_name, kitti_score_threshold, global_step, dataset_dir))
         native_eval_proc_05_iou = Process(
             target=evaluator_utils.run_kitti_native_script_with_05_iou,
-            args=(checkpoint_name, kitti_score_threshold, global_step, dataset_name))
+            args=(checkpoint_name, kitti_score_threshold, global_step, dataset_dir))
         # Don't call join on this cuz we do not want to block
         # this will cause one zombie process - should be fixed later.
         native_eval_proc.start()
