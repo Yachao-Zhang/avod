@@ -46,7 +46,7 @@ const int32_t MAX_OCCLUSION[3]  = {0, 1, 2};        // maximum occlusion level o
 const double  MAX_TRUNCATION[3] = {0.15, 0.3, 0.5}; // maximum truncation level of the groundtruth used for evaluation
 
 // evaluated object classes
-enum CLASSES{CAR=0, PEDESTRIAN=1, CYCLIST=2, PERSON=4};
+enum CLASSES{CAR=0, PEDESTRIAN=1, CYCLIST=2, PERSON=3};
 const int NUM_CLASS = 4;
 
 // parameters varying per class
