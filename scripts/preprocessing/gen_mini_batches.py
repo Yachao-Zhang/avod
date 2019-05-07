@@ -90,15 +90,15 @@ def main(dataset=None):
     ped_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/pedestrians_max_density.config'
     cyc_dataset_config_path = avod.root_dir() + \
-        '/configs/mb_preprocessing/rpn_cyclists.config'
+        '/configs/mb_preprocessing/cyclists.config'
     ppl_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/people_max_min_density.config'
     all_dataset_config_path = avod.root_dir() + \
-        '/configs/mb_preprocessing/test_all.config'
+        '/configs/mb_preprocessing/all.config'
     carped_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/carped.config'
     per_dataset_config_path = avod.root_dir() + \
-        '/configs/mb_preprocessing/rpn_person.config'
+        '/configs/mb_preprocessing/person.config'
 
     ##############################
     # Options
