@@ -95,6 +95,8 @@ def main(dataset=None):
         '/configs/mb_preprocessing/people_max_min_density.config'
     all_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/test_all.config'
+    carped_dataset_config_path = avod.root_dir() + \
+        '/configs/mb_preprocessing/carped.config'
     per_dataset_config_path = avod.root_dir() + \
         '/configs/mb_preprocessing/rpn_person.config'
 
@@ -104,11 +106,12 @@ def main(dataset=None):
     # Serial vs parallel processing
     in_parallel = True
 
-    process_car = True   # Cars
+    process_car = False   # Cars
     process_ped = False # Pedestrians
     process_cyc = False  # Cyclists
     process_ppl = False   # People (Pedestrians + Cyclists)
     process_all = False # Cars + Pedestrians + Cyclists
+    process_carped = True # Cars + Pedestrians
     process_per = False   # Person (Pedestrians + Cyclists joint class)
 
     # Number of child processes to fork, samples will
@@ -118,6 +121,7 @@ def main(dataset=None):
     num_cyc_children = 8
     num_ppl_children = 8
     num_all_children = 8
+    num_carped_children = 8
     num_per_children = 8
 
     ##############################
@@ -138,6 +142,9 @@ def main(dataset=None):
     if process_all:
         all_dataset = DatasetBuilder.load_dataset_from_config(
             all_dataset_config_path)
+    if process_carped:
+        carped_dataset = DatasetBuilder.load_dataset_from_config(
+            carped_dataset_config_path)
     if process_per:
         per_dataset = DatasetBuilder.load_dataset_from_config(
             per_dataset_config_path)
@@ -156,6 +163,8 @@ def main(dataset=None):
             do_preprocessing(ppl_dataset, None)
         if process_all:
             do_preprocessing(all_dataset, None)
+        if process_carped:
+            do_preprocessing(carped_dataset, None)
         if process_per:
             do_preprocessing(per_dataset, None)
 
@@ -213,6 +222,15 @@ def main(dataset=None):
                 all_dataset,
                 all_indices_split,
                 num_all_children)
+
+        # Carped (Cars + Pedestrians)
+        if process_carped:
+            carped_indices_split = split_indices(carped_dataset, num_carped_children)
+            split_work(
+                all_child_pids,
+                carped_dataset,
+                carped_indices_split,
+                num_carped_children)
 
         # Person (Pedestrians + Cyclists joint class)
         if process_per:

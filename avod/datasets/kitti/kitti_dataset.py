@@ -175,6 +175,8 @@ class KittiDataset:
         if self.num_classes > 1:
             if self.classes == ['Pedestrian', 'Cyclist']:
                 self.classes_name = 'People'
+            elif self.classes == ['Car', 'Pedestrian']:
+                self.classes_name = 'Carped'
             elif self.classes == ['Car', 'Pedestrian', 'Cyclist']:
                 self.classes_name = 'All'
             else:
