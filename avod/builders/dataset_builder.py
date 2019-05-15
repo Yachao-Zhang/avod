@@ -36,6 +36,17 @@ class DatasetBuilder(object):
         num_clusters=[2]
     )
 
+    ARCTIC_TEST = KittiDatasetConfig(
+        name="kitti",
+        dataset_dir='/notebooks/DATA/Arctic/object',
+        data_split="test",
+        data_split_dir="testing",
+        has_labels=False,
+        cluster_split="train",
+        classes=["Car"],
+        num_clusters=[2],
+    )
+
     KITTI_VAL = KittiDatasetConfig(
         name="kitti",
         dataset_dir='/notebooks/DATA/Kitti/object',

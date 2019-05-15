@@ -40,12 +40,12 @@ def main():
     The prediction score and IoU with ground truth can be toggled on or off
     as well, shown as (score, IoU) above the detection.
     """
-    dataset_config = DatasetBuilder.copy_config(DatasetBuilder.KITTI_VAL)
+    dataset_config = DatasetBuilder.copy_config(DatasetBuilder.ARCTIC_TEST)
 
     ##############################
     # Options
     ##############################
-    dataset_config.data_split = 'val'
+    dataset_config.data_split = 'test'
 
     fig_size = (10, 6.1)
 
@@ -57,8 +57,8 @@ def main():
     gt_classes = ['Car', 'Pedestrian', 'Cyclist']
 
     # Overwrite this to select a specific checkpoint
-    global_step = None
-    checkpoint_name = 'pyramid_all_aug_test'
+    global_step = 146000
+    checkpoint_name = 'carla_carped_max_density'
 
     # Drawing Toggles
     draw_proposals_separate = False
