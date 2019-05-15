@@ -288,35 +288,36 @@ def main():
                     plt.close(prop_fig)
 
         if draw_overlaid or draw_predictions_separate:
-            if len(prediction_boxes_3d) > 0:
-                # Project the 3D box predictions to image space
-                image_filter = []
-                final_boxes_2d = []
-                for i in range(len(prediction_boxes_3d)):
-                    box_3d = prediction_boxes_3d[i, 0:7]
-                    img_box = box_3d_projector.project_to_image_space(
-                        box_3d, calib_p2,
-                        truncate=True, image_size=image_size,
-                        discard_before_truncation=False)
-                    if img_box is not None:
-                        image_filter.append(True)
-                        final_boxes_2d.append(img_box)
-                    else:
-                        image_filter.append(False)
-                final_boxes_2d = np.asarray(final_boxes_2d)
-                final_prediction_boxes_3d = prediction_boxes_3d[image_filter]
-                final_scores = prediction_scores[image_filter]
-                final_class_indices = prediction_class_indices[image_filter]
+            #if len(prediction_boxes_3d) > 0:
+            # Project the 3D box predictions to image space
+            image_filter = []
+            final_boxes_2d = []
+            for i in range(len(prediction_boxes_3d)):
+                box_3d = prediction_boxes_3d[i, 0:7]
+                img_box = box_3d_projector.project_to_image_space(
+                    box_3d, calib_p2,
+                    truncate=True, image_size=image_size,
+                    discard_before_truncation=False)
+                if img_box is not None:
+                    image_filter.append(True)
+                    final_boxes_2d.append(img_box)
+                else:
+                    image_filter.append(False)
+            final_boxes_2d = np.asarray(final_boxes_2d)
+            final_prediction_boxes_3d = prediction_boxes_3d[image_filter]
+            final_scores = prediction_scores[image_filter]
+            final_class_indices = prediction_class_indices[image_filter]
 
-                num_of_predictions = final_boxes_2d.shape[0]
+            num_of_predictions = final_boxes_2d.shape[0]
 
-                # Convert to objs
-                final_prediction_objs = \
-                    [box_3d_encoder.box_3d_to_object_label(
-                        prediction, obj_type='Prediction')
-                        for prediction in final_prediction_boxes_3d]
-                for (obj, score) in zip(final_prediction_objs, final_scores):
-                    obj.score = score
+            # Convert to objs
+            final_prediction_objs = \
+                [box_3d_encoder.box_3d_to_object_label(
+                    prediction, obj_type='Prediction')
+                    for prediction in final_prediction_boxes_3d]
+            for (obj, score) in zip(final_prediction_objs, final_scores):
+                obj.score = score
+            """
             else:
                 if save_empty_images:
                     pred_fig, pred_2d_axes, pred_3d_axes = \
@@ -328,6 +329,7 @@ def main():
                     plt.savefig(filename)
                     plt.close(pred_fig)
                 continue
+            """
 
             if draw_overlaid:
                 # Overlay prediction boxes on image
