@@ -58,6 +58,17 @@ class DatasetBuilder(object):
         num_clusters=[2],
     )
 
+    CARLA_VAL = KittiDatasetConfig(
+        name="carla",
+        dataset_dir='/notebooks/DATA/Carla/object',
+        data_split="val",
+        data_split_dir="training",
+        has_labels=True,
+        cluster_split="train",
+        classes=["Car"],
+        num_clusters=[2],
+    )
+
     KITTI_TEST = KittiDatasetConfig(
         name="kitti",
         dataset_dir='/notebooks/DATA/Kitti/object',
