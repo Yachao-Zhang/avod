@@ -47,7 +47,7 @@ def main():
     ##############################
     dataset_config.data_split = 'test'
 
-    fig_size = (10, 6.1)
+    fig_size = (16, 9)
 
     rpn_score_threshold = 0.25
     avod_score_threshold = 0.25
