@@ -40,12 +40,12 @@ def main():
     The prediction score and IoU with ground truth can be toggled on or off
     as well, shown as (score, IoU) above the detection.
     """
-    dataset_config = DatasetBuilder.copy_config(DatasetBuilder.ARCTIC_TEST)
+    dataset_config = DatasetBuilder.copy_config(DatasetBuilder.CARLA_VAL)
 
     ##############################
     # Options
     ##############################
-    dataset_config.data_split = 'test'
+    dataset_config.data_split = 'val_mini'
 
     fig_size = (16, 9)
 
@@ -54,11 +54,12 @@ def main():
 
     # gt_classes = ['Car']
     # gt_classes = ['Pedestrian', 'Cyclist']
-    gt_classes = ['Car', 'Pedestrian', 'Cyclist']
+    # gt_classes = ['Car', 'Pedestrian', 'Cyclist']
+    gt_classes = ['Car', 'Pedestrian']
 
     # Overwrite this to select a specific checkpoint
-    global_step = 146000
-    checkpoint_name = 'carla_carped_max_density'
+    global_step = 106000
+    checkpoint_name = 'carped'
 
     # Drawing Toggles
     draw_proposals_separate = False
